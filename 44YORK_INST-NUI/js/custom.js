@@ -5,10 +5,18 @@
  	console.log("::LOADING 44YORK CUSTOM::");
 
 		var app = angular.module('viewCustom', ['angularLoad', 'reportProblem', 'googleAnalytics']).run (function($rootScope){
-
-			// Redirect incoming openurl.york.ac.uk requests
-			if (location.host == 'openurl.york.ac.uk') location.href = location.href.replace("//openurl.york.ac.uk", "//yorsearch.york.ac.uk");
-
+			
+		//redirect incoming requests not using custom domain. This url was shared during auth problems when migrating to VE
+		if (window.location.href.startsWith("https://york.primo.exlibrisgroup.com/")) {
+			const newUrl = window.location.href.replace(
+			"https://york.primo.exlibrisgroup.com/",
+			"https://yorsearch.york.ac.uk/"
+			);
+			window.location.replace(newUrl);
+		} else if (window.location.href.indexOf("/primo-explore/collectionDiscovery?") >-1){
+			var url = window.location.toString();
+			window.location = url.replace('primo-explore', 'discovery');
+			}
 		});
 
 
