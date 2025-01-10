@@ -215,14 +215,14 @@
                                 var title = encodeURIComponent(vm.parentCtrl.result.pnx.display.title[0]);
                                 //entry.1752528148=Title
 
-                                var author = encodeURIComponent(vm.parentCtrl.result.pnx.display.creator);
+                                var author = encodeURIComponent(vm.parentCtrl.result.pnx.search.creator);
                                 //&entry.1866861278=Author
 
                                 var material_type = encodeURIComponent(vm.parentCtrl.result.pnx.addata.format);
                                 //&entry.1859840384=Material+type
 
                                 if (vm.parentCtrl.result.pnx.addata.hasOwnProperty('risdate')){
-                                    var pub_year = encodeURIComponent(vm.parentCtrl.result.pnx.addata.risdate[0]);
+                                    var pub_year = encodeURIComponent(vm.parentCtrl.result.pnx.search.creationdate);
                                 }
 
                                 var loc = encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.mainLocation) + ' ' + encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.subLocation);
@@ -238,7 +238,7 @@
                                 var title = encodeURIComponent(vm.parentCtrl.result.pnx.display.title[0]);
                                 //entry.1752528148=Title
 
-                                var author = encodeURIComponent(vm.parentCtrl.result.pnx.display.creator);
+                                var author = encodeURIComponent(vm.parentCtrl.result.pnx.addata.au);
                                 //&entry.1866861278=Author
 
                                 var material_type = encodeURIComponent(vm.parentCtrl.result.pnx.addata.format);
@@ -246,9 +246,9 @@
 
                                 //journal records might not have this field
 
-                                if (vm.parentCtrl.result.pnx.addata.hasOwnProperty('risdate')){
-                                    var pub_year = encodeURIComponent(vm.parentCtrl.result.pnx.addata.risdate[0]);
-                                }
+                                //if (vm.parentCtrl.result.pnx.addata.hasOwnProperty('risdate')){
+                                    var pub_year = encodeURIComponent(vm.parentCtrl.result.pnx.addata.date);
+                                //}
 
                                 var loc = encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.mainLocation) + ' ' + encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.subLocation);
 
