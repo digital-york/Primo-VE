@@ -17,6 +17,13 @@
 			var url = window.location.toString();
 			window.location = url.replace('primo-explore', 'discovery');
 			}
+		else if (window.location.href.startsWith("https://openurl.york.ac.uk")) {
+			const newUrl = window.location.href.replace(
+			"https://openurl.york.ac.uk",
+			"https://yorsearch.york.ac.uk"
+			);
+				window.location.replace(newUrl);
+			};
 		});
 
 
@@ -62,6 +69,11 @@
 		document.head.appendChild(browzine.script);
 
 
+		/*unbound*/
+		var ubound = document.createElement("script");
+		ubound.src = "https://unbound.syndetics.com/syndeticsunbound/connector/initiator.php?a_id=136"
+		document.getElementsByTagName("body")[0].appendChild(ubound);
+
 		//************************** remove the below block as part of disabling book takeaway**********************//
 		//retrieve username for book takeaway
 		app.controller('prmUserAreaExpandableAfterController', function($scope, $rootScope) {
@@ -77,12 +89,6 @@
 			controller: 'prmUserAreaExpandableAfterController'
 		});
 		//*******************************end remove block ************************************************************//
-
-
-		//syndetics talpa
-		var jq = document.createElement("script");
-		jq.src = "//unbound.syndetics.com/syndeticsunbound/connector/initiator.php?a_id=136&i_id=156"
-		document.getElementsByTagName("body")[0].appendChild(jq);
 
 
 		//main book takeaway section
