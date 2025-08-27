@@ -1,9 +1,16 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap');
+
 /*peh customizations */
 
 /* Hide Tags in Detailed Display */
 [aria-label="Tags"]{display:none;}
 #tags{display:none;}
+
+*:not(i){
+	font-family: Inter, Verdana, Georgia, Tahoma, sans-serif;
+	
+}
 
 /* Hide Tags in Menu Tab */
 a.md-button[aria-label="TAGS"] {display:none;}
@@ -21,11 +28,26 @@ head {
 /*more space for logo */
 prm-topbar {
     height: 75px;
-	background-color: #262F38;
+	background-color: #001E82;
+	
+}
+
+div.in-element-dialog-context.layout-row.flex {
+  	background-color: white;
+}
+
+#tab-content-118 alma-howovp > div:nth-child(2) span:nth-child(1){
+	background-color: lightblue;
+	color: white;
+	
 }
 
 /*larger font on top nav */
-prm-main-menu[menu-type=menu] .md-button,prm-topbar .top-nav-bar .md-button{font-size:1.25em;text-transform:capitalize;font-weight:600;font-size:1.5vh}
+prm-main-menu[menu-type=menu] .md-button,prm-topbar .top-nav-bar .md-button{
+	text-transform: capitalize;
+    font-weight: 800 !important;
+    font-size: 1.5vh;
+}
 
 
 /*login menu */
@@ -38,7 +60,7 @@ prm-main-menu[menu-type=menu] .md-button,prm-topbar .top-nav-bar .md-button{font
 /*hover on main menu links*/
 div#mainMenu div:hover{
 	
-	background-color:#00546E;
+	background-color:#0E35B2;
 	
 }
 
@@ -50,7 +72,7 @@ prm-explore-main prm-topbar .md-button:not(.md-icon-button) {
 	
 prm-explore-main prm-topbar .md-button:not(.md-icon-button):hover {
 	
-	background-color:#00546E;
+	background-color:#0E35B2;
 }
 
 prm-topbar prm-logo {
@@ -71,58 +93,48 @@ prm-logo{
 
 
 div > div > prm-authentication > button[type="button"] {
-	background: #00546E;
+	background: #0E35B2;
 	color: #fff !important; 
 }
 
 
 div#getit_link1_0 button[type="button"] {
-	background: #00546E;
+	background: #0E35B2;
 	color: #fff;
 }
 
 /*make text headers of full display sections more visible*/
 
-.section-title{font-weight:600;color:#00546E!important;text-transform:uppercase;}
+.section-title{font-weight:600;color:#0E35B2!important;text-transform:uppercase;}
 
 /*facet header text*/
-.section-title-header{font-weight:600;color:white!important;text-transform:uppercase;}
+.section-title-header{font-weight:600;color:#3c0032;text-transform:uppercase;}
 
 /*facet background */
 
 prm-facet-group button.section-title {
-	background: #00546E;
+	background: #FFD200;
 }
 /*facet text */
 
 prm-facet-group button.section-title div h3 {
-	color: #fff;	
-}
-
-img.unbound_talpa_launch{
-	
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 15px;
-  width: 10%;
-	
+	color: #3C0032;	
 }
 
 /* Browse search colour*/
 
 prm-primary-bg, prm-browse-search-bar, prm-journals-search-bar, prm-search-bar, prm-spinner.overlay-cover.light-on-dark::after, prm-tags-search-bar {
-    background-color: #262F38;
+    background-color: #001E82;
 }
 
 .prm-primary-bg, prm-atoz-search-bar, prm-browse-search-bar, prm-collection-gallery-header .collection-header-inner, prm-newspapers-search-bar, prm-search-bar, prm-spinner.overlay-cover.light-on-dark:after, prm-tags-search-bar {
-    background-color: #00546E
+    background-color: #0E35B2
 }
 
 /*sign in colour*/
 /* Top nav bar (strip behind logo) */
 prm-topbar .top-nav-bar {
-    background-color: #262F38;
+    background-color: #001E82;
     position: relative;
     top: 0px;
 
@@ -135,12 +147,12 @@ prm-topbar .top-nav-bar {
 }
 
 .bar.alert-bar, .classic-input .search-scope, .prm-alert-border {
-    border-color: #262F38;
+    border-color: #001E82;
 }
 
 
 .md-card-content-text{ 
-  height: 100px;
+  height: 125px;
   display: flex;
   text-align:center;
 }
@@ -151,7 +163,7 @@ a#md-home-links {
 	-webkit-appearance: button;
     -moz-appearance: button;
     appearance: button;
-	background-color:#262F38;
+	background-color:#001E82;
     text-decoration: none;
 	text-align: center;
     color: white;
@@ -162,7 +174,7 @@ a#md-home-links {
 
 a#md-home-links:hover{
 	
-	background-color:#00546E;
+	background-color:#0E35B2;
 	
 }
 
@@ -205,7 +217,7 @@ a#md-home-links:hover{
         clear:both;
     }
     #footerWrapper {
-        background-color:#262F38;
+        background-color:#3c0032;
         position:relative;
         z-index:1;
     }
@@ -274,7 +286,7 @@ a#md-home-links:hover{
         font-weight:normal;
         line-height:20px;
         height: auto;
-        background-color: #262F38;
+        background-color: #3c0032;
         padding: 20px 0;
         border:0;
     }
@@ -284,7 +296,7 @@ a#md-home-links:hover{
     position: relative;
     padding:20px 0;
     width: 95%;
-    box-shadow: 0 50vh 0 50vh #262F38; /* make footer look like it goes to bottom of page*/
+    box-shadow: 0 50vh 0 50vh #3c0032; /* make footer look like it goes to bottom of page*/
     }
     #footerWrapper > ul .bar-wrap {
         display: inline-block;
@@ -421,7 +433,7 @@ a#md-home-links:hover{
 
 
 /*homepage*/
-.md-headline {font-weight:600;background-color:#00546E;color:white;font-size:20px;padding:7px;}
+.md-headline {font-weight:600;background-color:#0E35B2;color:white;font-size:20px;padding:7px;}
 .md-headline, .md-headline-intro{font-weight:600;}
 
 /*.md-headline-intro {font-weight:600;background-color:#A23479;color:white;font-size:20px;padding:7px;}
@@ -430,12 +442,12 @@ a#md-home-links:hover{
 		color: black !important;
 }*/
 
-.md-sub-headline{font-weight:600;background-color:#3D4753;color:white;font-size:20px;padding:7px;text-align:center;}
+.md-sub-headline{font-weight:600;background-color:#3C0032;color:white;font-size:20px;padding:7px;text-align:center;}
 .md-sub-headline{font-weight:600;}
 
 .fa-map-signs, .fa-laptop, .fa-key {
 	text-align: center;
-	color:#3D4753;
+	color:#3C0032;
 	padding-top:30px;
 	
 }
@@ -524,7 +536,7 @@ flex-direction: column;
 
 #close_cache^{
 	
-	background-color:#00546E;
+	background-color:#0E35B2;
 	
 }
 
@@ -532,7 +544,7 @@ flex-direction: column;
 .new-request-button {
 	
   color: #fffffc;
-  background-color: #00546E;
+  background-color: #0E35B2;
   padding: 1em 1.5em;
   text-decoration: none;
   text-transform: uppercase;
@@ -544,7 +556,7 @@ flex-direction: column;
 }
 
 #libkey-intro a {
-	  color:#00546E;
+	  color:#0E35B2;
 	  background-color: white;
 	  padding: 0.3em 0.3em;
 	  text-decoration: none;
