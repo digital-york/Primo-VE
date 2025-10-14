@@ -6,11 +6,6 @@
 
 		var app = angular.module('viewCustom', ['angularLoad', 'reportProblem', 'googleAnalytics']).run (function($rootScope){
 			
-		// Redirect incoming openurl.york.ac.uk requests (required for Shib 
-		if (location.host == 'openurl.york.ac.uk'){
-		location.href = location.href.replace("//openurl.york.ac.uk", "//yorsearch.york.ac.uk")};
-
-			
 		//redirect incoming requests not using custom domain. This url was shared during auth problems when migrating to VE
 		if (window.location.href.startsWith("https://york.primo.exlibrisgroup.com/")) {
 			const newUrl = window.location.href.replace(
@@ -22,36 +17,14 @@
 			var url = window.location.toString();
 			window.location = url.replace('primo-explore', 'discovery');
 			}
+		else if (window.location.href.startsWith("https://openurl.york.ac.uk")) {
+			const newUrl = window.location.href.replace(
+			"https://openurl.york.ac.uk",
+			"https://yorsearch.york.ac.uk"
+			);
+				window.location.replace(newUrl);
+			};
 		});
-
-
-	function checkNoInventory() {
-		const noInventoryElement = document.querySelector('.availability-status no_inventory');
-	if (noInventoryElement) {
-    // Element with both classes exists
-    console.log("Element with classes 'availability-status' and 'no_inventory' exists.");
-    return true; // Or do something else, like showing a message
-  } else {
-    // Element with both classes does not exist
-    console.log("Element with classes 'availability-status' and 'no_inventory' does not exist.");
-    return false; // Or do something else
-  }
-}
-
-// Example usage:
-const isNoInventory = checkNoInventory();
-
-if (isNoInventory) {
-  // Perform actions when the element exists
-  // Example: Hide a "Add to Cart" button
-  const addToCartButton = document.getElementById("add-to-cart"); // Replace with your button's ID
-  if (addToCartButton) {
-     addToCartButton.style.display = "none";
-  }
-
-} else {
-  // Perform actions when the element does not exist
-}
 
 
 		// Begin BrowZine - Primo Integration...
@@ -96,6 +69,11 @@ if (isNoInventory) {
 		document.head.appendChild(browzine.script);
 
 
+		/*unbound*/
+		var ubound = document.createElement("script");
+		ubound.src = "https://unbound.syndetics.com/syndeticsunbound/connector/initiator.php?a_id=136"
+		document.getElementsByTagName("body")[0].appendChild(ubound);
+
 		//************************** remove the below block as part of disabling book takeaway**********************//
 		//retrieve username for book takeaway
 		app.controller('prmUserAreaExpandableAfterController', function($scope, $rootScope) {
@@ -111,12 +89,6 @@ if (isNoInventory) {
 			controller: 'prmUserAreaExpandableAfterController'
 		});
 		//*******************************end remove block ************************************************************//
-
-
-		//syndetics talpa
-		var jq = document.createElement("script");
-		jq.src = "//unbound.syndetics.com/syndeticsunbound/connector/initiator.php?a_id=136&i_id=156"
-		document.getElementsByTagName("body")[0].appendChild(jq);
 
 
 		//main book takeaway section
@@ -202,37 +174,18 @@ if (isNoInventory) {
                         return vm.parentCtrl.result.delivery.deliveryCategory.includes(el);
                     });
 
-                    //YML changes - remove 44YORK_YML_LIB from array of non-requestable libraries
-                    //perform additional location-check for these - link should appear for YM and H locations - use subLocationCode
-
-                    //update 08/07/21 KM no lonber requestable during refurbishment
-
                     if (!delcat){
                         //array of non-requestable library codes
-                        var libCodes = ["44YORK_RBL_LIB", "44YORK_EXST_LIB","44YORK_EXST-B_LIB","44YORK_BIA_LIB","44YORK_NRM_LIB","44YORK_PET_LIB","44YORK_SOF_LIB","44YORK_ACA_LIB"]
-
-
-                        var itemLib = vm.parentCtrl.result.delivery.bestlocation.libraryCode;
-
-                        //is our current sub location in the non-requestable list?
-                        var rqst = libCodes.indexOf(itemLib);
-
-                        //comment this block out due to closure of YML 04/11/20 PEH
-                        if (itemLib == '44YORK_YML_LIB'){
-                            var subLocCode = vm.parentCtrl.result.delivery.bestlocation.subLocationCode;
-                            if (subLocCode == 'YM'){
-                                console.log ('*************requestable Minster***************');
-                                rqst = '-1';
-                            }else if (subLocCode == 'H'){
-                                console.log ('*************requestable Minster***************');
-                                rqst = '-1';
-                            }else{
-                                //non-requestable minster locations
-                                console.log ('*************non-requestable Minster***************');
-                                rqst = '1';
-                            }
-                        }
-
+                        var libCodes = ["RBL", "EXST","EXST-B","BIA","NRM","PET","SOF","ACA", "YML"]	
+						var yml = ["YM","H"]
+						//array of holdings
+						var holdings = vm.parentCtrl.result.delivery.holding;
+						// This will be true if at least one holding has a code NOT in the non-requestable list	OR it's a requestable YML sublocation
+						var hasRequestableItem = holdings.some(
+						  holding => !libCodes.includes(holding.libraryCode) || yml.includes(holding.subLocationCode)
+						);
+					
+						console.log (hasRequestableItem);
                     };
 
                     if (!elementExists) {
@@ -310,7 +263,7 @@ if (isNoInventory) {
 
                     //determine whether book takeaway link should appear based on delcategory/library code
                     vm.ShowReqLink = Boolean(delcat == false);
-                    vm.Requestable = Boolean(rqst == '-1');
+                    vm.Requestable = hasRequestableItem;
                 }
             }
               }
