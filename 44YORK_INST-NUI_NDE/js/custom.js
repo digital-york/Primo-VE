@@ -6,7 +6,7 @@
 
 		var app = angular.module('viewCustom', ['angularLoad', 'reportProblem', 'googleAnalytics']).run (function($rootScope){
 			
-		// Redirect incoming openurl.york.ac.uk requests (required for Shib 
+		// Redirect incoming openurl.york.ac.uk requests
 		if (location.host == 'openurl.york.ac.uk'){
 		location.href = location.href.replace("//openurl.york.ac.uk", "//yorsearch.york.ac.uk")};
 
@@ -23,35 +23,6 @@
 			window.location = url.replace('primo-explore', 'discovery');
 			}
 		});
-
-
-	function checkNoInventory() {
-		const noInventoryElement = document.querySelector('.availability-status no_inventory');
-	if (noInventoryElement) {
-    // Element with both classes exists
-    console.log("Element with classes 'availability-status' and 'no_inventory' exists.");
-    return true; // Or do something else, like showing a message
-  } else {
-    // Element with both classes does not exist
-    console.log("Element with classes 'availability-status' and 'no_inventory' does not exist.");
-    return false; // Or do something else
-  }
-}
-
-// Example usage:
-const isNoInventory = checkNoInventory();
-
-if (isNoInventory) {
-  // Perform actions when the element exists
-  // Example: Hide a "Add to Cart" button
-  const addToCartButton = document.getElementById("add-to-cart"); // Replace with your button's ID
-  if (addToCartButton) {
-     addToCartButton.style.display = "none";
-  }
-
-} else {
-  // Perform actions when the element does not exist
-}
 
 
 		// Begin BrowZine - Primo Integration...
