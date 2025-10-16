@@ -157,7 +157,6 @@
                 vm.showLocations = ['/fulldisplay', '/openurl'];
                 vm.Show = vm.showLocations.includes($location.path());
 
-
                 if(vm.Show){
                     //is user logged in?
                     var elementExists = document.getElementById("signInBtn");
@@ -184,8 +183,6 @@
 						var hasRequestableItem = holdings.some(
 						  holding => !libCodes.includes(holding.libraryCode) || yml.includes(holding.subLocationCode)
 						);
-					
-						console.log (hasRequestableItem);
                     };
 
                     if (!elementExists) {
