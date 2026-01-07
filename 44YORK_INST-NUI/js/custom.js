@@ -26,7 +26,6 @@
 			};
 		});
 
-
 		// Begin BrowZine - Primo Integration...
 		window.browzine = {
 			api: "https://public-api.thirdiron.com/public/v1/libraries/565",
@@ -73,6 +72,60 @@
 		var ubound = document.createElement("script");
 		ubound.src = "https://unbound.syndetics.com/syndeticsunbound/connector/initiator.php?a_id=136"
 		document.getElementsByTagName("body")[0].appendChild(ubound);
+		
+		console.log("PIN-VALIDATOR: Script fully loaded.");
+
+    console.log("PIN-VALIDATOR: Script starting with ID #prm_contact.pincode");
+
+    var observer = new MutationObserver(function (mutations) {
+        // Find the specific component
+        var passwordForm = document.querySelector('prm-change-password');
+
+        if (passwordForm && !passwordForm.dataset.hooked) {
+            passwordForm.dataset.hooked = "true";
+            
+            // Using attribute selector to handle the dot in the ID correctly
+            var pinInput = passwordForm.querySelector('[id="prm_contact.pincode"]');
+            var saveBtn = passwordForm.querySelector('button.button-confirm');
+
+            if (pinInput && saveBtn) {
+                console.log("PIN-VALIDATOR: Input field and Save button linked.");
+
+                // Create the error message element
+                var errorDiv = document.createElement('div');
+                errorDiv.id = 'pin-complexity-error';
+                errorDiv.innerHTML = '<p style="color: #c62828; font-size: 13px; margin-top: 5px; font-weight: bold;">⚠️ Error: PIN cannot be 0000 or sequential (1234).</p>';
+                errorDiv.style.display = 'none';
+                pinInput.parentNode.appendChild(errorDiv);
+
+                pinInput.addEventListener('input', function (e) {
+                    var val = e.target.value;
+                    
+                    // Complexity Logic
+                    var isIdentical = /^(\d)\1{3}$/.test(val); 
+                    var isSequential = /^(0123|1234|2345|3456|4567|5678|6789|9876|8765|7654|6543|5432|4321|3210)$/.test(val);
+
+                    if (isIdentical || isSequential) {
+                        // REJECT
+                        saveBtn.setAttribute('disabled', 'disabled');
+                        saveBtn.style.opacity = '0.4';
+                        saveBtn.style.pointerEvents = 'none';
+                        errorDiv.style.display = 'block';
+                        pinInput.style.borderBottom = '2px solid red';
+                    } else {
+                        // ACCEPT
+                        saveBtn.removeAttribute('disabled');
+                        saveBtn.style.opacity = '1';
+                        saveBtn.style.pointerEvents = 'auto';
+                        errorDiv.style.display = 'none';
+                        pinInput.style.borderBottom = '';
+                    }
+                });
+            }
+        }
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
 
 		//************************** remove the below block as part of disabling book takeaway**********************//
 		//retrieve username for book takeaway
@@ -273,11 +326,6 @@
 
 
 		/*******************end remove block ********************/
-
-
-		/*borthwick finding aid custom display*/
-
-
 
 
 		/*change default no results page*/

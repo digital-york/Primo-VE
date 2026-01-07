@@ -3,6 +3,26 @@
 
 /*peh customizations */
 
+/* Ensure the footer sits on top of the facet sidebar */
+prm-footer {
+    position: relative;
+    z-index: 100; 
+}
+
+/* Ensure the facet container stays below the footer's priority */
+prm-facet {
+    z-index: 10;
+}
+
+/* pin number dialogue */
+button.button-confirm[disabled], 
+button.button-confirm[disabled] span {
+    background-color: #ddd !important;
+    color: #888 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+}
+
 /* Hide Tags in Detailed Display */
 [aria-label="Tags"]{display:none;}
 #tags{display:none;}
