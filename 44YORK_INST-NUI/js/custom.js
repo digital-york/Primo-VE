@@ -206,7 +206,7 @@
                                 //&entry.1859840384=Material+type
 
                                 //if (vm.parentCtrl.result.pnx.addata.hasOwnProperty('risdate')){
-                                    var pub_year = encodeURIComponent(vm.parentCtrl.result.pnx.addata.date);
+                                    var pub_year = encodeURIComponent(vm.parentCtrl.result.pnx.addata.date[0]);
                                // }
 
                                 var loc = encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.mainLocation) + ' ' + encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.subLocation);
@@ -231,7 +231,7 @@
                                 //journal records might not have this field
 
                                 //if (vm.parentCtrl.result.pnx.addata.hasOwnProperty('risdate')){
-                                    var pub_year = encodeURIComponent(vm.parentCtrl.result.pnx.addata.date);
+                                    var pub_year = encodeURIComponent(vm.parentCtrl.result.pnx.addata.date[0]);
                                 //}
 
                                 var loc = encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.mainLocation) + ' ' + encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.subLocation);
