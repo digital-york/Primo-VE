@@ -17,6 +17,13 @@
 			var url = window.location.toString();
 			window.location = url.replace('primo-explore', 'discovery');
 			}
+		else if (window.location.href.startsWith("https://openurl.york.ac.uk")) {
+			const newUrl = window.location.href.replace(
+			"https://openurl.york.ac.uk",
+			"https://yorsearch.york.ac.uk"
+			);
+				window.location.replace(newUrl);
+			};
 		});
 
 
@@ -62,6 +69,92 @@
 		document.head.appendChild(browzine.script);
 
 
+		/*unbound*/
+		var ubound = document.createElement("script");
+		ubound.src = "https://unbound.syndetics.com/syndeticsunbound/connector/initiator.php?a_id=136"
+		document.getElementsByTagName("body")[0].appendChild(ubound);
+
+		// PIN validation on Library Card
+		function isPinSecure(pin) {
+			const pinRegex = /^\d{4}$/; // Ensure it's exactly 4 digits
+			if (!pinRegex.test(pin)) return false;
+
+			const identicalRegex = /^(\d)\1+$/; // e.g., 0000, 1111
+			if (identicalRegex.test(pin)) return false;
+
+			let isAscending = true;
+			let isDescending = true;
+			for (let i = 0; i < pin.length - 1; i++) {
+				const currentDigit = parseInt(pin[i], 10);
+				const nextDigit = parseInt(pin[i + 1], 10);
+				if (nextDigit !== currentDigit + 1) isAscending = false;
+				if (nextDigit !== currentDigit - 1) isDescending = false;
+			}
+
+			if (isAscending || isDescending) return false; // e.g., 1234 or 4321
+
+			return true;
+		}
+
+		// Listen for inputs across the document
+		document.addEventListener('input', function(event) {
+			// Check if the input is our specific PIN field (checking both ID and name just in case)
+			if (event.target && (event.target.id === 'prm_contact.pincode' || event.target.name === 'prm_contact.pincode')) {
+				const pinInput = event.target;
+				const pinValue = pinInput.value;
+				
+				// Define an ID for our custom error message to easily find and remove it
+				const errorMsgId = 'custom-pin-error-msg';
+				let errorSpan = document.getElementById(errorMsgId);
+
+				// Only validate if they have typed exactly 4 characters
+				if (pinValue.length === 4) {
+					if (!isPinSecure(pinValue)) {
+						// If it's not secure and the error message doesn't exist yet, create it
+						if (!errorSpan) {
+							errorSpan = document.createElement('span');
+							errorSpan.id = errorMsgId;
+							errorSpan.style.color = '#cc0000'; // Primo's typical error red
+							errorSpan.style.fontSize = '0.85em';
+							errorSpan.style.display = 'block';
+							errorSpan.style.marginTop = '4px';
+							errorSpan.innerText = 'Please choose a more secure PIN (avoid 1234, 0000, etc.).';
+							
+							// Insert the error message right below the input field
+							pinInput.parentNode.insertBefore(errorSpan, pinInput.nextSibling);
+						}
+						
+						// Highlight the input box in red
+						pinInput.style.border = '2px solid #cc0000';
+						
+						// Attempt to disable the submit button (find closest submit button in the form)
+						const form = pinInput.closest('form');
+						if (form) {
+							const submitBtn = form.querySelector('button[type="submit"], md-button[type="submit"]');
+							if (submitBtn) submitBtn.disabled = true;
+						}
+
+					} else {
+						// PIN is secure. Clean up errors and re-enable form
+						if (errorSpan) errorSpan.remove();
+						pinInput.style.border = ''; // Reset to default border
+						
+						const form = pinInput.closest('form');
+						if (form) {
+							const submitBtn = form.querySelector('button[type="submit"], md-button[type="submit"]');
+							if (submitBtn) submitBtn.disabled = false;
+						}
+					}
+				} else {
+					// Remove error message if they are still typing/deleting (length != 4)
+					if (errorSpan) errorSpan.remove();
+					pinInput.style.border = '';
+				}
+			}
+		});
+
+
+
 		//************************** remove the below block as part of disabling book takeaway**********************//
 		//retrieve username for book takeaway
 		app.controller('prmUserAreaExpandableAfterController', function($scope, $rootScope) {
@@ -78,45 +171,6 @@
 		});
 		//*******************************end remove block ************************************************************//
 
-
-		//syndetics talpa
-		var jq = document.createElement("script");
-		jq.src = "//unbound.syndetics.com/syndeticsunbound/connector/initiator.php?a_id=136&i_id=156"
-		document.getElementsByTagName("body")[0].appendChild(jq);
-
-
-		//main book takeaway section
-
-		//********************replace the following component/controller with the below to remove book takeaway but preseve Browzine integration***********************************//
-			//  app.controller('prmSearchResultAvailabilityLineAfterController', function($scope) {
-			//window.browzine.primo.searchResult($scope);
-		    //});
-
-		    //app.component('prmSearchResultAvailabilityLineAfter', {
-		   // bindings: { parentCtrl: '<' },
-		   // controller: 'prmSearchResultAvailabilityLineAfterController'
-		   //});
-
-
-		//app.controller('prmSearchResultAvailabilityLineAfterController', function ($scope) {
-
-		//	window.browzine.primo.searchResult($scope);
-
-		//	}
-		//);
-
-		//*****no book takeaway*******//
-
-
-		/*app.component('prmSearchBarAfter', {
-			bindings: { parentCtrl: '<'
-			},
-			controller: 'prmSearchBarAfterController',
-
-			template: '\n <div>	<img class="unbound_talpa_launch" src="https://pics.cdn.librarything.com//pics/talpa/5/talpa_b_80h.png" srcset="https://pics.cdn.librarything.com//pics/talpa/5/talpa_b_80h@2x.png 2x, https://pics.cdn.librarything.com//pics/talpa/5/talpa_b_80h@3x.png 3x"></div>'
-
-
-		});*/
 
 		app.component('prmSearchResultAvailabilityLineAfter', {
 			bindings: { parentCtrl: '<',
@@ -151,7 +205,6 @@
                 vm.showLocations = ['/fulldisplay', '/openurl'];
                 vm.Show = vm.showLocations.includes($location.path());
 
-
                 if(vm.Show){
                     //is user logged in?
                     var elementExists = document.getElementById("signInBtn");
@@ -168,37 +221,16 @@
                         return vm.parentCtrl.result.delivery.deliveryCategory.includes(el);
                     });
 
-                    //YML changes - remove 44YORK_YML_LIB from array of non-requestable libraries
-                    //perform additional location-check for these - link should appear for YM and H locations - use subLocationCode
-
-                    //update 08/07/21 KM no lonber requestable during refurbishment
-
                     if (!delcat){
                         //array of non-requestable library codes
-                        var libCodes = ["44YORK_RBL_LIB", "44YORK_EXST_LIB","44YORK_EXST-B_LIB","44YORK_BIA_LIB","44YORK_NRM_LIB","44YORK_PET_LIB","44YORK_SOF_LIB","44YORK_ACA_LIB"]
-
-
-                        var itemLib = vm.parentCtrl.result.delivery.bestlocation.libraryCode;
-
-                        //is our current sub location in the non-requestable list?
-                        var rqst = libCodes.indexOf(itemLib);
-
-                        //comment this block out due to closure of YML 04/11/20 PEH
-                        if (itemLib == '44YORK_YML_LIB'){
-                            var subLocCode = vm.parentCtrl.result.delivery.bestlocation.subLocationCode;
-                            if (subLocCode == 'YM'){
-                                console.log ('*************requestable Minster***************');
-                                rqst = '-1';
-                            }else if (subLocCode == 'H'){
-                                console.log ('*************requestable Minster***************');
-                                rqst = '-1';
-                            }else{
-                                //non-requestable minster locations
-                                console.log ('*************non-requestable Minster***************');
-                                rqst = '1';
-                            }
-                        }
-
+                        var libCodes = ["RBL", "EXST","EXST-B","BIA","NRM","PET","SOF","ACA", "YML"]	
+						var yml = ["YM","H"]
+						//array of holdings
+						var holdings = vm.parentCtrl.result.delivery.holding;
+						// This will be true if at least one holding has a code NOT in the non-requestable list	OR it's a requestable YML sublocation
+						var hasRequestableItem = holdings.some(
+						  holding => !libCodes.includes(holding.libraryCode) || yml.includes(holding.subLocationCode)
+						);
                     };
 
                     if (!elementExists) {
@@ -215,15 +247,13 @@
                                 var title = encodeURIComponent(vm.parentCtrl.result.pnx.display.title[0]);
                                 //entry.1752528148=Title
 
-                                var author = encodeURIComponent(vm.parentCtrl.result.pnx.display.creator);
+                                var author = encodeURIComponent(vm.parentCtrl.result.pnx.addata.au);
                                 //&entry.1866861278=Author
 
                                 var material_type = encodeURIComponent(vm.parentCtrl.result.pnx.addata.format);
                                 //&entry.1859840384=Material+type
 
-                                if (vm.parentCtrl.result.pnx.addata.hasOwnProperty('risdate')){
-                                    var pub_year = encodeURIComponent(vm.parentCtrl.result.pnx.addata.risdate[0]);
-                                }
+								var pub_year = encodeURIComponent(vm.parentCtrl.result.pnx.addata.date?.[0] || "");
 
                                 var loc = encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.mainLocation) + ' ' + encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.subLocation);
 
@@ -238,17 +268,14 @@
                                 var title = encodeURIComponent(vm.parentCtrl.result.pnx.display.title[0]);
                                 //entry.1752528148=Title
 
-                                var author = encodeURIComponent(vm.parentCtrl.result.pnx.display.creator);
+                                var author = encodeURIComponent(vm.parentCtrl.result.pnx.addata.au);
                                 //&entry.1866861278=Author
 
                                 var material_type = encodeURIComponent(vm.parentCtrl.result.pnx.addata.format);
                                 //&entry.1859840384=Material+type
 
-                                //journal records might not have this field
+                                var pub_year = encodeURIComponent(vm.parentCtrl.result.pnx.addata.date?.[0] || "");
 
-                                if (vm.parentCtrl.result.pnx.addata.hasOwnProperty('risdate')){
-                                    var pub_year = encodeURIComponent(vm.parentCtrl.result.pnx.addata.risdate[0]);
-                                }
 
                                 var loc = encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.mainLocation) + ' ' + encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.subLocation);
 
@@ -276,7 +303,7 @@
 
                     //determine whether book takeaway link should appear based on delcategory/library code
                     vm.ShowReqLink = Boolean(delcat == false);
-                    vm.Requestable = Boolean(rqst == '-1');
+                    vm.Requestable = hasRequestableItem;
                 }
             }
               }
@@ -315,7 +342,7 @@
 		app.component('prmNoSearchResultAfter', {
 			bindings: { parentCtrl: '<' },
 			controller: 'prmNoSearchResultAfterController',
-			template: '<md-card class="default-card zero-margin _md md-primoExplore-theme"><md-card-title><md-card-title-text><span translate="" class="md-headline ng-scope">No results found</span></md-card-title-text></md-card-title><md-card-content><p><span>There are no results matching your search:<blockquote><i>{{$ctrl.getSearchTerm()}}</i>.</blockquote><div ng-if=$ctrl.pciSetting !== \'true\'"><a href="https://yorsearch.york.ac.uk/primo-explore/search?query=any,contains,{{$ctrl.getSearchTerm()}}&tab=default_tab&search_scope=CS_EVERYTHING&vid=44YORK-NUI&offset=0&sortby=rank&pcAvailability=true"><b>Widen your search to search everything</b></a></div></span></p><p><span translate="" class="bold-text ng-scope">Suggestions:</span></p><ul><li translate="" class="ng-scope">Make sure that all words are spelled correctly.</li><li translate="" class="ng-scope">Try a different search scope.</li><li translate="" class="ng-scope">Try different search terms.</li><li translate="" class="ng-scope">Try more general search terms.</li><li translate="" class="ng-scope">Try fewer search terms.</li></ul></p><p><b><a href="http://subjectguides.york.ac.uk/">Your Academic Liaison Librarian can offer you subject specific help and support</a></b></p></md-card-content></md-card>'
+			template: '<md-card class="default-card zero-margin _md md-primoExplore-theme"><md-card-title><md-card-title-text><span translate="" class="md-headline ng-scope">No results found</span></md-card-title-text></md-card-title><md-card-content><p><span>There are no results matching your search:<blockquote><i>{{$ctrl.getSearchTerm()}}</i>.</blockquote></span></p><p><span translate="" class="bold-text ng-scope">Suggestions:</span></p><ul><li translate="" class="ng-scope">Make sure that all words are spelled correctly.</li><li translate="" class="ng-scope">Try different search terms.</li><li translate="" class="ng-scope">Try more general search terms.</li><li translate="" class="ng-scope">Try fewer search terms.</li></ul><p><b><a href="http://subjectguides.york.ac.uk/">Your Faculty Librarian can offer you subject specific help and support</a></b></p></md-card-content></md-card>'
 		});
 
 		/*end no results customisation */
