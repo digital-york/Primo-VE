@@ -1,149 +1,229 @@
-(function(){
-"use strict";
-"use strict";
+(function () {
+    "use strict";
 
- 	console.log("::LOADING 44YORK CUSTOM::");
+    console.log("::LOADING 44YORK CUSTOM::");
 
-		var app = angular.module('viewCustom', ['angularLoad', 'reportProblem', 'googleAnalytics']).run (function($rootScope){
-			
-		//redirect incoming requests not using custom domain. This url was shared during auth problems when migrating to VE
-		if (window.location.href.startsWith("https://york.primo.exlibrisgroup.com/")) {
-			const newUrl = window.location.href.replace(
-			"https://york.primo.exlibrisgroup.com/",
-			"https://yorsearch.york.ac.uk/"
-			);
-			window.location.replace(newUrl);
-		} else if (window.location.href.indexOf("/primo-explore/collectionDiscovery?") >-1){
-			var url = window.location.toString();
-			window.location = url.replace('primo-explore', 'discovery');
-			}
-		else if (window.location.href.startsWith("https://openurl.york.ac.uk")) {
-			const newUrl = window.location.href.replace(
-			"https://openurl.york.ac.uk",
-			"https://yorsearch.york.ac.uk"
-			);
-				window.location.replace(newUrl);
-			};
-		});
+    var app = angular.module('viewCustom', ['angularLoad', 'reportProblem', 'googleAnalytics']).run(function ($rootScope) {
 
-
-		// Begin BrowZine - Primo Integration...
-		window.browzine = {
-			api: "https://public-api.thirdiron.com/public/v1/libraries/565",
-			apiKey: "ba4a928c-2968-42f3-b9f8-11a8990b6914",
-
-			journalCoverImagesEnabled: true,
-
-			journalBrowZineWebLinkTextEnabled: true,
-			journalBrowZineWebLinkText: "View Journal Contents",
-
-			acticleBrowZineWebLinkTextEnabled: true,
-			articleBrowZineWebLinkText: "View Issue Contents",
-
-			articlePDFDownloadLinkEnabled: true,
-			articlePDFDownloadLinkText: "Download PDF",
-
-			articleLinkEnabled: true,
-			articleLinkText: "Read Article",
-
-			printRecordsIntegrationEnabled: true,
-
-			unpaywallEmailAddressKey: "enter-your-email@your-institution-domain.edu",
-
-			articlePDFDownloadViaUnpaywallEnabled: true,
-			articlePDFDownloadViaUnpaywallText: "Download PDF (via Unpaywall.org)",
-
-			articleLinkViaUnpaywallEnabled: true,
-			articleLinkViaUnpaywallText: "Read Article (via Unpaywall.org)",
-
-			articleAcceptedManuscriptPDFViaUnpaywallEnabled: true,
-			articleAcceptedManuscriptPDFViaUnpaywallText: "Download PDF (Accepted Manuscript via Unpaywall.org)",
-
-			articleAcceptedManuscriptArticleLinkViaUnpaywallEnabled: true,
-			articleAcceptedManuscriptArticleLinkViaUnpaywallText: "Read Article (Accepted Manuscript via Unpaywall.org)"
-
-		};
-
-		browzine.script = document.createElement("script");
-		browzine.script.src = "https://s3.amazonaws.com/browzine-adapters/primo/browzine-primo-adapter.js";
-		document.head.appendChild(browzine.script);
+        //redirect incoming requests not using custom domain. This url was shared during auth problems when migrating to VE
+        if (window.location.href.startsWith("https://york.primo.exlibrisgroup.com/")) {
+            const newUrl = window.location.href.replace(
+                "https://york.primo.exlibrisgroup.com/",
+                "https://yorsearch.york.ac.uk/"
+            );
+            window.location.replace(newUrl);
+        } else if (window.location.href.indexOf("/primo-explore/collectionDiscovery?") > -1) {
+            var url = window.location.toString();
+            window.location = url.replace('primo-explore', 'discovery');
+        }
+        else if (window.location.href.startsWith("https://openurl.york.ac.uk")) {
+            const newUrl = window.location.href.replace(
+                "https://openurl.york.ac.uk",
+                "https://yorsearch.york.ac.uk"
+            );
+            window.location.replace(newUrl);
+        };
+    });
 
 
-		/*unbound*/
-		var ubound = document.createElement("script");
-		ubound.src = "https://unbound.syndetics.com/syndeticsunbound/connector/initiator.php?a_id=136"
-		document.getElementsByTagName("body")[0].appendChild(ubound);
+    // Begin BrowZine - Primo Integration...
+    window.browzine = {
+        api: "https://public-api.thirdiron.com/public/v1/libraries/565",
+        apiKey: "ba4a928c-2968-42f3-b9f8-11a8990b6914",
 
-		//************************** remove the below block as part of disabling book takeaway**********************//
-		//retrieve username for book takeaway
-		app.controller('prmUserAreaExpandableAfterController', function($scope, $rootScope) {
-            this.$onInit = function(){
-              {
+        journalCoverImagesEnabled: true,
+
+        journalBrowZineWebLinkTextEnabled: true,
+        journalBrowZineWebLinkText: "View Journal Contents",
+
+        articleBrowZineWebLinkTextEnabled: true, // FIXED: acticle -> article
+        articleBrowZineWebLinkText: "View Issue Contents",
+
+        articlePDFDownloadLinkEnabled: true,
+        articlePDFDownloadLinkText: "Download PDF",
+
+        articleLinkEnabled: true,
+        articleLinkText: "Read Article",
+
+        printRecordsIntegrationEnabled: true,
+
+        unpaywallEmailAddressKey: "enter-your-email@your-institution-domain.edu",
+
+        articlePDFDownloadViaUnpaywallEnabled: true,
+        articlePDFDownloadViaUnpaywallText: "Download PDF (via Unpaywall.org)",
+
+        articleLinkViaUnpaywallEnabled: true,
+        articleLinkViaUnpaywallText: "Read Article (via Unpaywall.org)",
+
+        articleAcceptedManuscriptPDFViaUnpaywallEnabled: true,
+        articleAcceptedManuscriptPDFViaUnpaywallText: "Download PDF (Accepted Manuscript via Unpaywall.org)",
+
+        articleAcceptedManuscriptArticleLinkViaUnpaywallEnabled: true,
+        articleAcceptedManuscriptArticleLinkViaUnpaywallText: "Read Article (Accepted Manuscript via Unpaywall.org)"
+
+    };
+
+    browzine.script = document.createElement("script");
+    browzine.script.src = "https://s3.amazonaws.com/browzine-adapters/primo/browzine-primo-adapter.js";
+    document.head.appendChild(browzine.script);
+
+
+    /*unbound*/
+    var ubound = document.createElement("script");
+    ubound.src = "https://unbound.syndetics.com/syndeticsunbound/connector/initiator.php?a_id=136"; // FIXED: Added semicolon
+    document.getElementsByTagName("body")[0].appendChild(ubound);
+
+    //************************** remove the below block as part of disabling book takeaway**********************//
+    //retrieve username for book takeaway
+    app.controller('prmUserAreaExpandableAfterController', function ($scope, $rootScope) {
+        this.$onInit = function () {
+            {
                 $rootScope.name = this.parentCtrl.userSessionManagerService.getUserName();
-              }
-            };
-        });
+            }
+        };
+    });
 
-		app.component('prmUserAreaExpandableAfter', {
-			bindings: { parentCtrl: '<' },
-			controller: 'prmUserAreaExpandableAfterController'
+    app.component('prmUserAreaExpandableAfter', {
+        bindings: { parentCtrl: '<' },
+        controller: 'prmUserAreaExpandableAfterController'
+    });
+    //*******************************end remove block ************************************************************//
+
+
+  // PIN validation on Library Card
+		function isPinSecure(pin) {
+			const pinRegex = /^\d{4}$/; // Ensure it's exactly 4 digits
+			if (!pinRegex.test(pin)) return false;
+
+			const identicalRegex = /^(\d)\1+$/; // e.g., 0000, 1111
+			if (identicalRegex.test(pin)) return false;
+
+			let isAscending = true;
+			let isDescending = true;
+			for (let i = 0; i < pin.length - 1; i++) {
+				const currentDigit = parseInt(pin[i], 10);
+				const nextDigit = parseInt(pin[i + 1], 10);
+				if (nextDigit !== currentDigit + 1) isAscending = false;
+				if (nextDigit !== currentDigit - 1) isDescending = false;
+			}
+
+			if (isAscending || isDescending) return false; // e.g., 1234 or 4321
+
+			return true;
+		}
+
+		// Event listener
+		document.addEventListener('input', function(event) {
+			// check id and name to identify pin field
+			if (event.target && (event.target.id === 'prm_contact.pincode' || event.target.name === 'prm_contact.pincode')) {
+				const pinInput = event.target;
+				const pinValue = pinInput.value;
+				
+				// Define an ID for our custom error message to easily find and remove it
+				const errorMsgId = 'custom-pin-error-msg';
+				let errorSpan = document.getElementById(errorMsgId);
+
+				// Only validate if they have typed exactly 4 characters
+				if (pinValue.length === 4) {
+					if (!isPinSecure(pinValue)) {
+						// If it's not secure and the error message doesn't exist yet, create it
+						if (!errorSpan) {
+							errorSpan = document.createElement('span');
+							errorSpan.id = errorMsgId;
+							errorSpan.style.color = '#cc0000'; // Primo's typical error red
+							errorSpan.style.fontSize = '0.85em';
+							errorSpan.style.display = 'block';
+							errorSpan.style.marginTop = '4px';
+							errorSpan.innerText = 'Please choose a more secure PIN (avoid 1234, 0000, etc.).';
+							
+							// Insert the error message right below the input field
+							pinInput.parentNode.insertBefore(errorSpan, pinInput.nextSibling);
+						}
+						
+						// Highlight the input box in red
+						pinInput.style.border = '2px solid #cc0000';
+						
+						// Attempt to disable the submit button (find closest submit button in the form)
+						const form = pinInput.closest('form');
+						if (form) {
+							const submitBtn = form.querySelector('button[type="submit"], md-button[type="submit"]');
+							if (submitBtn) submitBtn.disabled = true;
+						}
+
+					} else {
+						// PIN is secure. Clean up errors and re-enable form
+						if (errorSpan) errorSpan.remove();
+						pinInput.style.border = ''; // Reset to default border
+						
+						const form = pinInput.closest('form');
+						if (form) {
+							const submitBtn = form.querySelector('button[type="submit"], md-button[type="submit"]');
+							if (submitBtn) submitBtn.disabled = false;
+						}
+					}
+				} else {
+					// Remove error message if they are still typing/deleting (length != 4)
+					if (errorSpan) errorSpan.remove();
+					pinInput.style.border = '';
+				}
+			}
 		});
-		//*******************************end remove block ************************************************************//
+
+    //main book takeaway section
+
+    //********************replace the following component/controller with the below to remove book takeaway but preseve Browzine integration***********************************//
+    //  app.controller('prmSearchResultAvailabilityLineAfterController', function($scope) {
+    //window.browzine.primo.searchResult($scope);
+    //});
+
+    //app.component('prmSearchResultAvailabilityLineAfter', {
+    // bindings: { parentCtrl: '<' },
+    // controller: 'prmSearchResultAvailabilityLineAfterController'
+    //});
 
 
-		//main book takeaway section
+    //app.controller('prmSearchResultAvailabilityLineAfterController', function ($scope) {
 
-		//********************replace the following component/controller with the below to remove book takeaway but preseve Browzine integration***********************************//
-			//  app.controller('prmSearchResultAvailabilityLineAfterController', function($scope) {
-			//window.browzine.primo.searchResult($scope);
-		    //});
+    //  window.browzine.primo.searchResult($scope);
 
-		    //app.component('prmSearchResultAvailabilityLineAfter', {
-		   // bindings: { parentCtrl: '<' },
-		   // controller: 'prmSearchResultAvailabilityLineAfterController'
-		   //});
+    //  }
+    //);
+
+    //*****no book takeaway*******//
 
 
-		//app.controller('prmSearchResultAvailabilityLineAfterController', function ($scope) {
+    /*app.component('prmSearchBarAfter', {
+        bindings: { parentCtrl: '<'
+        },
+        controller: 'prmSearchBarAfterController',
 
-		//	window.browzine.primo.searchResult($scope);
-
-		//	}
-		//);
-
-		//*****no book takeaway*******//
+        template: '\n <div> <img class="unbound_talpa_launch" src="https://pics.cdn.librarything.com//pics/talpa/5/talpa_b_80h.png" srcset="https://pics.cdn.librarything.com//pics/talpa/5/talpa_b_80h@2x.png 2x, https://pics.cdn.librarything.com//pics/talpa/5/talpa_b_80h@3x.png 3x"></div>'
 
 
-		/*app.component('prmSearchBarAfter', {
-			bindings: { parentCtrl: '<'
-			},
-			controller: 'prmSearchBarAfterController',
+    });*/
 
-			template: '\n <div>	<img class="unbound_talpa_launch" src="https://pics.cdn.librarything.com//pics/talpa/5/talpa_b_80h.png" srcset="https://pics.cdn.librarything.com//pics/talpa/5/talpa_b_80h@2x.png 2x, https://pics.cdn.librarything.com//pics/talpa/5/talpa_b_80h@3x.png 3x"></div>'
+    app.component('prmSearchResultAvailabilityLineAfter', {
+        bindings: {
+            parentCtrl: '<',
+            buttonText: '@',
+            buttonLink: '@',
+            formURL: '@',
+            Requestable: '@',
+            Show: '@'
+        },
+        controller: 'prmSearchResultAvailabilityLineAfterController',
 
-
-		});*/
-
-		app.component('prmSearchResultAvailabilityLineAfter', {
-			bindings: { parentCtrl: '<',
-				buttonText: '@',
-				buttonLink: '@',
-				formURL: '@' ,
-				Requestable: '@',
-				Show: '@'},
-			controller: 'prmSearchResultAvailabilityLineAfterController',
-
-			template: '\n <div ng-If="$ctrl.ShowReqLink && $ctrl.Requestable" class="bar filter-bar layout-align-center-center layout-row margin-top-medium" layout="row" layout-align="center center">\n          <span class="margin-right-small"></span>\n          <a ng-href="{{$ctrl.formURL}}" target="_blank">\n              <button class="button-with-icon zero-margin md-button md-button-raised md-primoExplore-theme" type="button" aria-label={{$ctrl.buttonText}} style="color: #00546E;">\n                  <prm-icon icon-type="svg" svg-icon-set="action" icon-definition="ic_description_24px"></prm-icon>\n                  <span style="text-transform: none;">{{$ctrl.serviceText}}</span>\n              </button>\n          </a>\n      </div>'
+        template: '\n <div ng-If="$ctrl.ShowReqLink && $ctrl.Requestable" class="bar filter-bar layout-align-center-center layout-row margin-top-medium" layout="row" layout-align="center center">\n          <span class="margin-right-small"></span>\n          <a ng-href="{{$ctrl.formURL}}" target="_blank">\n              <button class="button-with-icon zero-margin md-button md-button-raised md-primoExplore-theme" type="button" aria-label={{$ctrl.buttonText}} style="color: #00546E;">\n                  <prm-icon icon-type="svg" svg-icon-set="action" icon-definition="ic_description_24px"></prm-icon>\n                  <span style="text-transform: none;">{{$ctrl.serviceText}}</span>\n              </button>\n          </a>\n      </div>'
 
 
-		});
+    });
 
 
-		app.controller('prmSearchResultAvailabilityLineAfterController', function($scope, $rootScope, $location) {
-            var vm = this;
+    app.controller('prmSearchResultAvailabilityLineAfterController', function ($scope, $rootScope, $location) {
+        var vm = this;
 
-            this.$onInit = function(){
-              {
+        this.$onInit = function () {
+            {
                 window.browzine.primo.searchResult($scope);
 
                 //test whether item is available in physical form - any electronic delcategory means that
@@ -157,7 +237,7 @@
                 vm.showLocations = ['/fulldisplay', '/openurl'];
                 vm.Show = vm.showLocations.includes($location.path());
 
-                if(vm.Show){
+                if (vm.Show) {
                     //is user logged in?
                     var elementExists = document.getElementById("signInBtn");
                     //array of non-requestable delivery categories
@@ -173,26 +253,26 @@
                         return vm.parentCtrl.result.delivery.deliveryCategory.includes(el);
                     });
 
-                    if (!delcat){
+                    if (!delcat) {
                         //array of non-requestable library codes
-                        var libCodes = ["RBL", "EXST","EXST-B","BIA","NRM","PET","SOF","ACA", "YML"]	
-						var yml = ["YM","H"]
-						//array of holdings
-						var holdings = vm.parentCtrl.result.delivery.holding;
-						// This will be true if at least one holding has a code NOT in the non-requestable list	OR it's a requestable YML sublocation
-						var hasRequestableItem = holdings.some(
-						  holding => !libCodes.includes(holding.libraryCode) || yml.includes(holding.subLocationCode)
-						);
+                        var libCodes = ["RBL", "EXST", "EXST-B", "BIA", "NRM", "PET", "SOF", "ACA", "YML"]; // FIXED: Added semicolon
+                        var yml = ["YM", "H"]; // FIXED: Added semicolon
+                        //array of holdings
+                        var holdings = vm.parentCtrl.result.delivery.holding;
+                        // This will be true if at least one holding has a code NOT in the non-requestable list OR it's a requestable YML sublocation
+                        var hasRequestableItem = holdings.some(
+                            holding => !libCodes.includes(holding.libraryCode) || yml.includes(holding.subLocationCode)
+                        );
                     };
 
                     if (!elementExists) {
-                        if (!delcat){
+                        if (!delcat) {
                             //user logged in
                             vm.buttonText = 'Need a postal loan or scan? Click here';
 
                             //gather information for google form
 
-                            if (vm.displayMode){ //overlay
+                            if (vm.displayMode) { //overlay
 
                                 var rec_id = vm.parentCtrl.result.pnx.control.sourcerecordid[0];
 
@@ -205,17 +285,15 @@
                                 var material_type = encodeURIComponent(vm.parentCtrl.result.pnx.addata.format);
                                 //&entry.1859840384=Material+type
 
-                                //if (vm.parentCtrl.result.pnx.addata.hasOwnProperty('risdate')){
-                                    var pub_year = encodeURIComponent(vm.parentCtrl.result.pnx.addata.date[0]);
-                               // }
+                                var pub_year = encodeURIComponent(vm.parentCtrl.result.pnx.addata.date?.[0] || "");
 
                                 var loc = encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.mainLocation) + ' ' + encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.subLocation);
 
                                 var shelfmark = vm.parentCtrl.result.delivery.bestlocation.callNumber;
                                 //&entry.1777930827=Shelfmark
                                 shelfmark = encodeURIComponent(shelfmark.replace('&nbsp;&nbsp;', ''));
-                            }else{
-                            //not in overlay
+                            } else {
+                                //not in overlay
                                 var rec_id = vm.parentCtrl.result.pnx.control.sourcerecordid[0];
 
 
@@ -228,11 +306,8 @@
                                 var material_type = encodeURIComponent(vm.parentCtrl.result.pnx.addata.format);
                                 //&entry.1859840384=Material+type
 
-                                //journal records might not have this field
+                                var pub_year = encodeURIComponent(vm.parentCtrl.result.pnx.addata.date?.[0] || "");
 
-                                //if (vm.parentCtrl.result.pnx.addata.hasOwnProperty('risdate')){
-                                    var pub_year = encodeURIComponent(vm.parentCtrl.result.pnx.addata.date[0]);
-                                //}
 
                                 var loc = encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.mainLocation) + ' ' + encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.subLocation);
 
@@ -249,8 +324,8 @@
                             vm.serviceText = 'Need a postal loan or scan? Click here';
 
                             //link to Google form with parameters retrieved above
-                            vm.formURL ='https://docs.google.com/forms/d/e/1FAIpQLScm2fmPXpqeFDf2wUMZNkTLakZ_nI6sJWwstHSS7l3fu_inLw/viewform?entry.34625858=&entry.1752528148=' + title + '&entry.301156700=' +
-                            '&entry.97733718=' + author + '&entry.165289220=' + pub_year + '&entry.1078294971=&entry.2086517750=' + material_type + '&entry.1347329161=' + loc + '&entry.2093632974=' + shelfmark +  '&entry.435363005=' + userID + '&entry.1924359520=' + rec_id;
+                            vm.formURL = 'https://docs.google.com/forms/d/e/1FAIpQLScm2fmPXpqeFDf2wUMZNkTLakZ_nI6sJWwstHSS7l3fu_inLw/viewform?entry.34625858=&entry.1752528148=' + title + '&entry.301156700=' +
+                                '&entry.97733718=' + author + '&entry.165289220=' + pub_year + '&entry.1078294971=&entry.2086517750=' + material_type + '&entry.1347329161=' + loc + '&entry.2093632974=' + shelfmark + '&entry.435363005=' + userID + '&entry.1924359520=' + rec_id;
 
                         } else {
                             vm.buttonText = 'PLEASE LOG IN TO REQUEST';
@@ -258,203 +333,200 @@
                             vm.serviceText = '';
                         }
 
-                    //determine whether book takeaway link should appear based on delcategory/library code
-                    vm.ShowReqLink = Boolean(delcat == false);
-                    vm.Requestable = hasRequestableItem;
+                        //determine whether book takeaway link should appear based on delcategory/library code
+                        vm.ShowReqLink = Boolean(delcat == false);
+                        vm.Requestable = hasRequestableItem;
+                    }
                 }
             }
-              }
-            };
-        });
+        };
+    });
 
 
-		console.log('************************End Book Takeaway*************************');
-
-
-
-		/*******************end remove block ********************/
-
-
-		/*borthwick finding aid custom display*/
+    console.log('************************End Book Takeaway*************************');
 
 
 
+    /*******************end remove block ********************/
 
-		/*change default no results page*/
 
-		app.controller('prmNoSearchResultAfterController', [function() {
-            var vm = this;
+    /*borthwick finding aid custom display*/
 
-            this.$onInit = function(){
-              {
+
+
+
+    /*change default no results page*/
+
+    app.controller('prmNoSearchResultAfterController', [function () {
+        var vm = this;
+
+        this.$onInit = function () {
+            {
                 vm.getSearchTerm = getSearchTerm;
                 vm.pciSetting = vm.parentCtrl.searchStateService.searchObject.pcAvailability || '';
                 function getSearchTerm() {
                     return vm.parentCtrl.term;
                 }
-              }
+            }
+        };
+    }]);
+
+    app.component('prmNoSearchResultAfter', {
+        bindings: { parentCtrl: '<' },
+        controller: 'prmNoSearchResultAfterController',
+        template: '<md-card class="default-card zero-margin _md md-primoExplore-theme"><md-card-title><md-card-title-text><span translate="" class="md-headline ng-scope">No results found</span></md-card-title-text></md-card-title><md-card-content><p><span>There are no results matching your search:<blockquote><i>{{$ctrl.getSearchTerm()}}</i>.</blockquote></span></p><p><span translate="" class="bold-text ng-scope">Suggestions:</span></p><ul><li translate="" class="ng-scope">Make sure that all words are spelled correctly.</li><li translate="" class="ng-scope">Try different search terms.</li><li translate="" class="ng-scope">Try more general search terms.</li><li translate="" class="ng-scope">Try fewer search terms.</li></ul><p><b><a href="http://subjectguides.york.ac.uk/">Your Faculty Librarian can offer you subject specific help and support</a></b></p></md-card-content></md-card>'
+    });
+
+    /*end no results customisation */
+
+    /*Custom Footer*/
+    /*- ### --- Primo Footer JS ---- Code Originally from NLNZ --- ### */
+    app.component('prmExploreFooterAfter', {
+        bindings: { parentCtrl: '<' },
+        template: '<div id="footerWrapper"><ul><li><div class="ftext"><span class="headline">University Library</span><p>&nbsp;</p><p>University of York, Heslington, York, YO10 5DD, UK</p><p>Tel: +44 (0)1904 323838</p><p>&nbsp;</p></div></li><li><div class="ftext"><span class="headline">Library Links</span><p>&nbsp;</p><p><a href="https://www.york.ac.uk/library/contact/" class="footer_link">Contact Us</a><p><a href="https://informationbookings.york.ac.uk/r">Book a Study Room</a></p><p><a href="https://browzine.com/libraries/565/subjects">Browse Journals Online</a></p></div></li></ul><div class="line-2-copy-left"></div><div class="line-2-copy-right"></div><div class="bar"><div class="bar-wrap"><ul class="links"><li><a href="https://www.york.ac.uk/library" class="md-primoExplore-theme">Library Homepage</a>&nbsp;&nbsp;&nbsp;| </li><li><a href="https://www.york.ac.uk/about/legal-statements/" class="md-primoExplore-theme">Legal Statements</a>&nbsp;&nbsp;&nbsp;| </li><li><a href="https://www.york.ac.uk/about/legal-statements/#tab-5" class="md-primoExplore-theme">Privacy</a>&nbsp;&nbsp;&nbsp;|</li><li><a href="https://subjectguides.york.ac.uk/accessibility-statements/yorsearch" alt="Link to accessibility statement" class="md-primoExplore-theme">Accessibility Statement</a></li></ul><div class="logos"><span></span></a><a href="https://www.york.ac.uk/" target="_blank" class="all-govt md-primoExplore-theme"><span><img title="" src="custom/44YORK_INST-NUI/img/uoy-logo.png" width="210" alt="University of York logo"></span></a></div><div class="clear"></div><div class="copyright"></div></div></div></div>'
+
+    });
+
+    angular.module('changeExample', []).controller('ExampleController', ['$scope', function ($scope) {
+        $scope.counter = 0;
+        $scope.change = function () {
+            $scope.counter++;
+        };
+    }]);
+
+    // FIXED: Removed orphaned webPreferences block here that was causing clutter.
+
+    /*----------libchat slider-----------*/
+    (function () {
+        var lc = document.createElement('script'); lc.type = 'text/javascript'; lc.async = 'true';
+        lc.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'libanswers.york.ac.uk/load_chat.php?hash=cf1799572b0b3157a8ee72471190c327';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(lc, s);
+        console.log(s);
+    })();
+    /*---------------libchat slider ends ---------------*/
+
+    console.log("::FINISHED LOADING 44YORK CUSTOM::");
+
+    /*generate list of required modules*/
+    console.log(angular.module('viewCustom').requires);
+
+    angular.module('reportProblem', []);
+
+    var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = window.location.search.substring(1),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+            }
+        }
+    };
+
+    var docid = getUrlParameter('docid');
+    var rep_url = "https://docs.google.com/forms/d/e/1FAIpQLSdWTLtHSWjgIijK0ZQU0Rub5L_Mx9etXmvesW_hoSHCSfr3Dw/viewform?usp=pp_url&entry.982245342=";
+
+    angular.module('reportProblem').component('ocaReportProblem', {
+        bindings: {
+            messageText: '@',
+            buttonText: '@',
+            reportUrl: '@'
+        },
+        template: '\n      <div ng-if="$ctrl.show" class="bar filter-bar layout-align-center-center layout-row margin-top-medium" layout="row" layout-align="center center">\n          <span class="margin-right-small">{{$ctrl.messageText}}</span>\n          <a ng-href="{{$ctrl.targetUrl}}" target="_blank">\n              <button class="button-with-icon zero-margin md-button md-button-raised md-primoExplore-theme" type="button" aria-label="Report a Problem" style="color: #5c92bd;">\n                  <prm-icon icon-type="svg" svg-icon-set="action" icon-definition="ic_report_problem_24px"></prm-icon>\n                  <span style="text-transform: none;">{{$ctrl.buttonText}}</span>\n              </button>\n          </a>\n      </div>',
+        controller: ['$location', '$httpParamSerializer', function ($location, $httpParamSerializer) {
+            this.messageText = this.messageText || 'See something that doesn\'t look right?';
+            this.buttonText = this.buttonText || 'Report a Problem';
+            this.showLocations = ['/fulldisplay', '/openurl'];
+            this.$onInit = function () {
+                //this.targetUrl = this.reportUrl + $httpParamSerializer($location.search());
+                //this.targetUrl = rep_url;
+                this.targetUrl = rep_url + getUrlParameter('docid');
+                this.show = this.showLocations.includes($location.path());
             };
-        }]);
+        }]
+    });
 
-		app.component('prmNoSearchResultAfter', {
-			bindings: { parentCtrl: '<' },
-			controller: 'prmNoSearchResultAfterController',
-			template: '<md-card class="default-card zero-margin _md md-primoExplore-theme"><md-card-title><md-card-title-text><span translate="" class="md-headline ng-scope">No results found</span></md-card-title-text></md-card-title><md-card-content><p><span>There are no results matching your search:<blockquote><i>{{$ctrl.getSearchTerm()}}</i>.</blockquote></span></p><p><span translate="" class="bold-text ng-scope">Suggestions:</span></p><ul><li translate="" class="ng-scope">Make sure that all words are spelled correctly.</li><li translate="" class="ng-scope">Try different search terms.</li><li translate="" class="ng-scope">Try more general search terms.</li><li translate="" class="ng-scope">Try fewer search terms.</li></ul><p><b><a href="http://subjectguides.york.ac.uk/">Your Faculty Librarian can offer you subject specific help and support</a></b></p></md-card-content></md-card>'
-		});
+    app.component('prmActionListAfter', { template: '<oca-report-problem report-url="' + rep_url + '" message-text="Want to report a problem?" button-text="Get in touch" />' });
 
-		/*end no results customisation */
-
-		/*Custom Footer*/
-		/*- ### --- Primo Footer JS ---- Code Originally from NLNZ --- ### */
-		app.component('prmExploreFooterAfter', {
-			bindings: { parentCtrl: '<' },
-			template: '<div id="footerWrapper"><ul><li><div class="ftext"><span class="headline">University Library</span><p>&nbsp;</p><p>University of York, Heslington, York, YO10 5DD, UK</p><p>Tel: +44 (0)1904 323838</p><p>&nbsp;</p></div></li><li><div class="ftext"><span class="headline">Library Links</span><p>&nbsp;</p><p><a href="https://www.york.ac.uk/library/contact/" class="footer_link">Contact Us</a><p><a href="https://informationbookings.york.ac.uk/r">Book a Study Room</a></p><p><a href="https://browzine.com/libraries/565/subjects">Browse Journals Online</a></p></div></li></ul><div class="line-2-copy-left"></div><div class="line-2-copy-right"></div><div class="bar"><div class="bar-wrap"><ul class="links"><li><a href="https://www.york.ac.uk/library" class="md-primoExplore-theme">Library Homepage</a>&nbsp;&nbsp;&nbsp;| </li><li><a href="https://www.york.ac.uk/about/legal-statements/" class="md-primoExplore-theme">Legal Statements</a>&nbsp;&nbsp;&nbsp;| </li><li><a href="https://www.york.ac.uk/about/legal-statements/#tab-5" class="md-primoExplore-theme">Privacy</a>&nbsp;&nbsp;&nbsp;|</li><li><a href="https://subjectguides.york.ac.uk/accessibility-statements/yorsearch" alt="Link to accessibility statement" class="md-primoExplore-theme">Accessibility Statement</a></li></ul><div class="logos"><span></span></a><a href="https://www.york.ac.uk/" target="_blank" class="all-govt md-primoExplore-theme"><span><img title="" src="custom/44YORK_INST-NUI/img/uoy-logo.png" width="210" alt="University of York logo"></span></a></div><div class="clear"></div><div class="copyright"></div></div></div></div>'
-
-		});
-
-		angular.module('changeExample', []).controller('ExampleController', ['$scope', function ($scope) {
-			$scope.counter = 0;
-			$scope.change = function () {
-				$scope.counter++;
-			};
-		}]);
-
-		//The lines below solved the issue
-		webPreferences: {
-			nodeIntegration: true;
-		}
-
-		/*----------libchat slider-----------*/
-		(function () {
-			var lc = document.createElement('script');lc.type = 'text/javascript';lc.async = 'true';
-			lc.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'libanswers.york.ac.uk/load_chat.php?hash=cf1799572b0b3157a8ee72471190c327';
-			var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(lc, s);
-			console.log(s);
-		})();
-		/*---------------libchat slider ends ---------------*/
-
-		console.log("::FINISHED LOADING 44YORK CUSTOM::");
-
-		/*generate list of required modules*/
-		console.log(angular.module('viewCustom').requires);
-
-		angular.module('reportProblem', []);
-
-		var getUrlParameter = function getUrlParameter(sParam) {
-			var sPageURL = window.location.search.substring(1),
-			    sURLVariables = sPageURL.split('&'),
-			    sParameterName,
-			    i;
-
-			for (i = 0; i < sURLVariables.length; i++) {
-				sParameterName = sURLVariables[i].split('=');
-				if (sParameterName[0] === sParam) {
-					return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
-				}
-			}
-		};
-
-		var docid = getUrlParameter('docid');
-		var rep_url = "https://docs.google.com/forms/d/e/1FAIpQLSdWTLtHSWjgIijK0ZQU0Rub5L_Mx9etXmvesW_hoSHCSfr3Dw/viewform?usp=pp_url&entry.982245342=";
-
-		angular.module('reportProblem').component('ocaReportProblem', {
-			bindings: {
-				messageText: '@',
-				buttonText: '@',
-				reportUrl: '@'
-			},
-			template: '\n      <div ng-if="$ctrl.show" class="bar filter-bar layout-align-center-center layout-row margin-top-medium" layout="row" layout-align="center center">\n          <span class="margin-right-small">{{$ctrl.messageText}}</span>\n          <a ng-href="{{$ctrl.targetUrl}}" target="_blank">\n              <button class="button-with-icon zero-margin md-button md-button-raised md-primoExplore-theme" type="button" aria-label="Report a Problem" style="color: #5c92bd;">\n                  <prm-icon icon-type="svg" svg-icon-set="action" icon-definition="ic_report_problem_24px"></prm-icon>\n                  <span style="text-transform: none;">{{$ctrl.buttonText}}</span>\n              </button>\n          </a>\n      </div>',
-			controller: ['$location', '$httpParamSerializer', function ($location, $httpParamSerializer) {
-				this.messageText = this.messageText || 'See something that doesn\'t look right?';
-				this.buttonText = this.buttonText || 'Report a Problem';
-				this.showLocations = ['/fulldisplay', '/openurl'];
-				this.$onInit = function () {
-					//this.targetUrl = this.reportUrl + $httpParamSerializer($location.search());
-					//this.targetUrl = rep_url;
-					this.targetUrl = rep_url + getUrlParameter('docid');
-					this.show = this.showLocations.includes($location.path());
-				};
-			}]
-		});
-
-		app.component('prmActionListAfter', { template: '<oca-report-problem report-url="' + rep_url + '" message-text="Want to report a problem?" button-text="Get in touch" />' });
-
-		/* end report problem */
+    /* end report problem */
 
 
-		angular.module('googleAnalytics', []);
-		angular.module('googleAnalytics').run(function ($rootScope, $interval, analyticsOptions) {
-			if (analyticsOptions.hasOwnProperty("enabled") && analyticsOptions.enabled) {
-				if (analyticsOptions.hasOwnProperty("siteId") && analyticsOptions.siteId != '') {
-					if (typeof ga === 'undefined') {
-						(function (i, s, o, g, r, a, m) {
-							i['GoogleAnalyticsObject'] = r;i[r] = i[r] || function () {
-								(i[r].q = i[r].q || []).push(arguments);
-							}, i[r].l = 1 * new Date();a = s.createElement(o), m = s.getElementsByTagName(o)[0];a.async = 1;a.src = g;m.parentNode.insertBefore(a, m);
-						})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    angular.module('googleAnalytics', []);
+    angular.module('googleAnalytics').run(function ($rootScope, $interval, analyticsOptions) {
+        if (analyticsOptions.hasOwnProperty("enabled") && analyticsOptions.enabled) {
+            if (analyticsOptions.hasOwnProperty("siteId") && analyticsOptions.siteId != '') {
+                if (typeof ga === 'undefined') {
+                    (function (i, s, o, g, r, a, m) {
+                        i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                            (i[r].q = i[r].q || []).push(arguments);
+                        }, i[r].l = 1 * new Date(); a = s.createElement(o), m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m);
+                    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-						ga('create', analyticsOptions.siteId, { 'alwaysSendReferrer': true });
-						ga('set', 'anonymizeIp', true);
-					}
-				}
-				$rootScope.$on('$locationChangeSuccess', function (event, toState, fromState) {
-					if (analyticsOptions.hasOwnProperty("defaultTitle")) {
-						var documentTitle = analyticsOptions.defaultTitle;
-						var interval = $interval(function () {
-							if (document.title !== '') documentTitle = document.title;
-							if (window.location.pathname.indexOf('openurl') !== -1 || window.location.pathname.indexOf('fulldisplay') !== -1) if (angular.element(document.querySelector('prm-full-view-service-container .item-title>a')).length === 0) return;else documentTitle = angular.element(document.querySelector('prm-full-view-service-container .item-title>a')).text();
+                    ga('create', analyticsOptions.siteId, { 'alwaysSendReferrer': true });
+                    ga('set', 'anonymizeIp', true);
+                }
+            }
+            $rootScope.$on('$locationChangeSuccess', function (event, toState, fromState) {
+                if (analyticsOptions.hasOwnProperty("defaultTitle")) {
+                    var documentTitle = analyticsOptions.defaultTitle;
+                    var interval = $interval(function () {
+                        if (document.title !== '') documentTitle = document.title;
+                        if (window.location.pathname.indexOf('openurl') !== -1 || window.location.pathname.indexOf('fulldisplay') !== -1) if (angular.element(document.querySelector('prm-full-view-service-container .item-title>a')).length === 0) return; else documentTitle = angular.element(document.querySelector('prm-full-view-service-container .item-title>a')).text();
 
-							if (typeof ga !== 'undefined') {
-								if (fromState != toState) ga('set', 'referrer', fromState);
-								ga('set', 'location', toState);
-								ga('set', 'title', documentTitle);
-								ga('send', 'pageview');
-							}
-							$interval.cancel(interval);
-						}, 0);
-					}
-				});
-			}
-		});
-		angular.module('googleAnalytics').value('analyticsOptions', {
-			enabled: true,
-			siteId: 'UA-21938253-13',
-			defaultTitle: 'YorSearch'
-		});
-	})();
+                        if (typeof ga !== 'undefined') {
+                            if (fromState != toState) ga('set', 'referrer', fromState);
+                            ga('set', 'location', toState);
+                            ga('set', 'title', documentTitle);
+                            ga('send', 'pageview');
+                        }
+                        $interval.cancel(interval);
+                    }, 0);
+                }
+            });
+        }
+    });
+    angular.module('googleAnalytics').value('analyticsOptions', {
+        enabled: true,
+        siteId: 'UA-21938253-13',
+        defaultTitle: 'YorSearch'
+    });
+})();
 
 
-	window.addEventListener('load', (event) => {
-	  console.log('page is fully loaded');
-	  //locate preFilter dropdowns
-	  var ddown = document.querySelector(".pre-filters-container");
+window.addEventListener('load', (event) => {
+    console.log('page is fully loaded');
+    //locate preFilter dropdowns
+    var ddown = document.querySelector(".pre-filters-container");
 
-	});
+});
 
-	/*- ########## ---------- Non AngularJS code ---------- ########## */
-	/*- ########## ----------Footer, code courtesy of EL/NLNZ - measure page once "is sticky" is put in and (try) to put footer after results ---------- ########## */
+/*- ########## ---------- Non AngularJS code ---------- ########## */
+/*- ########## ----------Footer, code courtesy of EL/NLNZ - measure page once "is sticky" is put in and (try) to put footer after results ---------- ########## */
 
-	// Instantiate variables that will be reset repeatedly in the listener function
-	var max = 0;
-	var winHeight = 0;
-	var scrollTop = 0;
-	var foot = 0;
-	// and let's have a small buffer before the footerWrapper
-	var buffer = 50;
+// Instantiate variables that will be reset repeatedly in the listener function
+var max = 0;
+var winHeight = 0;
+var scrollTop = 0;
+var foot = 0;
+// and let's have a small buffer before the footerWrapper
+var buffer = 50;
 
-	window.addEventListener('scroll', function (e) {
-		// Total length of document
-		max = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight, document.body.offsetHeight, document.documentElement.offsetHeight, document.body.clientHeight, document.documentElement.clientHeight);
-		// Height of window
-		winHeight = window.innerHeight || (document.documentElement || document.body).clientHeight;
-		// Point of the top of the document visible on screen
-		scrollTop = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop;
-		// Height of footer
-		foot = Math.round(parseFloat(window.getComputedStyle(document.getElementById('footerWrapper')).height));
-		// check where we are in terms of scrolling and the footer
-		if (scrollTop + winHeight >= max - foot) {
-			document.querySelectorAll('.primo-scrollbar, .is-stuck')[0].style.maxHeight = 'calc(100% - ' + Math.abs(max - winHeight - scrollTop - foot - buffer) + 'px)';
-		} else {
-			document.querySelectorAll('.primo-scrollbar, .is-stuck')[0].style.maxHeight = 'calc(100% - 2em)';
-		}
-	});
+window.addEventListener('scroll', function (e) {
+    // Total length of document
+    max = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight, document.body.offsetHeight, document.documentElement.offsetHeight, document.body.clientHeight, document.documentElement.clientHeight);
+    // Height of window
+    winHeight = window.innerHeight || (document.documentElement || document.body).clientHeight;
+    // Point of the top of the document visible on screen
+    scrollTop = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop;
+    // Height of footer
+    foot = Math.round(parseFloat(window.getComputedStyle(document.getElementById('footerWrapper')).height));
+    // check where we are in terms of scrolling and the footer
+    if (scrollTop + winHeight >= max - foot) {
+        document.querySelectorAll('.primo-scrollbar, .is-stuck')[0].style.maxHeight = 'calc(100% - ' + Math.abs(max - winHeight - scrollTop - foot - buffer) + 'px)';
+    } else {
+        document.querySelectorAll('.primo-scrollbar, .is-stuck')[0].style.maxHeight = 'calc(100% - 2em)';
+    }
+});
